@@ -1,0 +1,108 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.7"
+    import: ["@key", "@shareable", "@requires", "@external"]
+  )
+
+"""
+A location in space where there's something interesting to see.
+"""
+interface CelestialBody {
+  id: ID!
+  name: String!
+  distanceFromEarth: Float!
+    @deprecated(reason: "Missing units, use lightYearsFromEarth")
+  lightYearsFromEarth: Float!
+}
+
+"""
+A planet in our solar system.
+"""
+type SolarPlanet implements CelestialBody {
+  id: ID!
+  name: String!
+  distanceFromEarth: Float!
+    @deprecated(reason: "Missing units, use lightYearsFromEarth")
+  lightYearsFromEarth: Float!
+}
+
+"""
+Not quite a planet.
+"""
+type DwarfPlanet implements CelestialBody {
+  id: ID!
+  name: String!
+  distanceFromEarth: Float!
+    @deprecated(reason: "Missing units, use lightYearsFromEarth")
+  lightYearsFromEarth: Float!
+}
+
+"""
+A planet in another solar system or galaxy.
+"""
+type Exoplanet implements CelestialBody @key(fields: "id") {
+  id: ID!
+  name: String!
+  distanceFromEarth: Float!
+    @deprecated(reason: "Missing units, use lightYearsFromEarth")
+  lightYearsFromEarth: Float!
+  "The name of the star where this exoplanet is found."
+  starSystem: String!
+  "A link to NASA for more information on this destination."
+  nasaTravelGuideUrl: String
+}
+
+"""
+Either a solar planet or an exoplanet.
+"""
+union Planet = SolarPlanet | Exoplanet | DwarfPlanet
+
+"""
+A type representing a moon.
+"""
+type Moon implements CelestialBody {
+  id: ID!
+  name: String!
+  distanceFromEarth: Float!
+    @deprecated(reason: "Missing units, use lightYearsFromEarth")
+  lightYearsFromEarth: Float!
+  planet: Planet!
+}
+
+"""
+Something fun to do on an exoplanet.
+"""
+type InterstellarExperience @key(fields: "name") {
+  name: String!
+  destinationId: ID! @external
+  destination: Exoplanet @requires(fields: "destinationId")
+}
+
+"""
+The root query type.
+"""
+type Query {
+  destinations: [CelestialBody]
+}
+
+"""
+Some popular interstellar destinations.
+"""
+enum TopDestination {
+  EXOPLANET_KEPLER_186F
+  EXOPLANET_KEPLER_16B
+  EXOPLANET_HD_40307G
+  EXOPLANET_55_CANCRI_E
+  EXOPLANET_TRAPPIST_1E
+  SOLARPLANET_PLUTO @deprecated(reason: "Pluto is no longer a planet.")
+}
+
+"""
+The root mutation type.
+"""
+type Mutation {
+  """
+  Enter the poll for your favorite interstellar destination.
+  """
+  submitFavoriteDestination(destination: TopDestination!): Boolean
+}

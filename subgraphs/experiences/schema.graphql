@@ -1,0 +1,54 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.7"
+    import: ["@key", "@shareable", "@external"]
+  )
+
+"""
+A planet in another solar system or galaxy.
+"""
+type Exoplanet @key(fields: "id") {
+  id: ID!
+  experience: InterstellarExperience
+}
+
+"""
+Something fun to do on an exoplanet.
+"""
+type InterstellarExperience @key(fields: "name") {
+  name: String!
+  description: String!
+  destinationId: ID!
+  "A link to NASA for more information on this experience."
+  nasaPosterUrl: String!
+}
+
+"""
+The root query type.
+"""
+type Query {
+  experiences: [InterstellarExperience]
+}
+
+"""
+How much experience someone has with Graph Insights.
+"""
+enum InsightsExperienceLevel {
+  None
+  Trainee
+  Practitioner
+  Wizard
+}
+
+"""
+The root mutation type.
+"""
+type Mutation {
+  """
+  Enter the poll for your experience level with GraphQL observability.
+  """
+  submitInsightsExperienceLevel(
+    level: InsightsExperienceLevel!
+    firstName: String
+  ): Boolean
+}
