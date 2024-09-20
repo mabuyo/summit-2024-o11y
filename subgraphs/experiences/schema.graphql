@@ -34,7 +34,7 @@ type Query {
 How much experience someone has with Graph Insights.
 """
 enum InsightsExperienceLevel {
-  None
+  Novice
   Trainee
   Practitioner
   Wizard
@@ -49,6 +49,6 @@ type Mutation {
   """
   submitInsightsExperienceLevel(
     level: InsightsExperienceLevel!
-    firstName: String
+    companyName: String
   ): Boolean
 }
