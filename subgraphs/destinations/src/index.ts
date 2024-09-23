@@ -49,7 +49,7 @@ const server = new ApolloServer({
         },
         async nasaTravelGuideUrl(parent: any) {
           return new Promise((resolve) =>
-            setTimeout(() => resolve(parent.nasaTravelGuideUrl), 100)
+            setTimeout(() => resolve(parent.nasaTravelGuideUrl), 500)
           );
         },
         __resolveReference(rep) {
