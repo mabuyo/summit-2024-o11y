@@ -34,7 +34,6 @@ type Query {
 How much experience someone has with Graph Insights.
 """
 enum InsightsExperienceLevel {
-  Novice
   Trainee
   Practitioner
   Wizard
